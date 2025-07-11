@@ -6,6 +6,11 @@ export default defineConfig({
   dts: true,
   clean: true,
   outDir: 'dist',
-  // ✅ Copy CSS manually or use a plugin
+  esbuildOptions(options) {
+    options.banner = {
+      js: '"use client";',
+    };
+  },
+  // ✅ Copy CSS manually after build
   onSuccess: 'cp src/app/globals.css dist/globals.css',
 });

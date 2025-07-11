@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦴 Skeleton UI Components
 
-## Getting Started
+A customizable set of Skeleton components for React — great for building smooth loading placeholders for images, paragraphs, and general UI blocks.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔧 Components
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### `Skeleton`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The base skeleton block. Handles layout, shape, and optional image placeholders.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Props
 
-## Learn More
+| Prop           | Type                    | Description                                                                 |
+|----------------|-------------------------|-----------------------------------------------------------------------------|
+| `width`        | `string \| number`      | Width of the skeleton. Defaults to `'100%'`.                               |
+| `height`       | `string \| number`      | Height of the skeleton. Defaults to `'1rem'`.                              |
+| `circle`       | `boolean`               | Makes the skeleton circular.                                               |
+| `borderRadius` | `string \| number`      | Border radius for the skeleton (ignored if `circle` is true).              |
+| `placeholder`  | `boolean \| string`     | If `true`, uses default placeholder image (`/Images/loader.gif`). Or pass a URL. |
+| `opacity`      | `number \| string`      | Opacity value between 0 and 1 or as a string percentage.                   |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### `SkeletonImage`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Image-specific skeleton wrapper. Supports circular or rectangular shapes.
 
-## Deploy on Vercel
+#### Props
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Inherits from `Skeleton`, plus:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Prop     | Type               | Description                                                               |
+|----------|--------------------|---------------------------------------------------------------------------|
+| `size`   | `number`           | Sets both `width` and `height`. Ignored if `width` or `height` is provided. |
+| `circle` | `boolean`          | Defaults to `true` if `size` is passed.                                   |
+
+---
+
+### `SkeletonParagraph`
+
+Multi-line skeleton block for simulating paragraph/text content.
+
+#### Props
+
+| Prop           | Type                       | Description                                               |
+|----------------|----------------------------|-----------------------------------------------------------|
+| `rows`         | `number`                   | Number of lines. Default is `3`.                          |
+| `widths`       | `(string \| number)[]`     | Optional array of widths for each line.                  |
+| `lineHeight`   | `string \| number`         | Height of each line. Default is `'1rem'`.                |
+| `spacing`      | `string \| number`         | Space between lines. Default is `'0.5rem'`.              |
+| `placeholder`  | `boolean \| string`        | Uses image placeholder if `true` or string path provided. |
+| `borderRadius` | `string \| number`         | Radius for each line.                                     |
+| `opacity`      | `number \| string`         | Line opacity.                                             |
+
+---
+
+### `SkeletonClientWrapper`
+
+Client-side wrapper that shows skeletons during a simulated loading state.
+
+#### Props
+
+| Prop         | Type                        | Description                                                 |
+|--------------|-----------------------------|-------------------------------------------------------------|
+| `loadertime` | `number`                    | Duration in milliseconds to show skeleton. Default: `5000`. |
+| `type`       | `'Image' \| 'Paragraph'`    | Determines which component (`SkeletonImage`, `SkeletonParagraph`) to show. |
+
+Inherits all props from `Skeleton`, `SkeletonImage`, or `SkeletonParagraph` depending on type.
+
+---
+
+## 🪄 useSkeleton Hook
+
+Simple loading hook that returns `true` for a specified time:
+
+```tsx
+const loading = useSkeleton(3000); // true for 3 seconds
+
+🖼 Placeholder Image
+If using placeholder, ensure the image file is in /public/Images/loader.gif. You can override with a custom image path:
+
+
+<Skeleton placeholder /> // uses default
+<Skeleton placeholder="/Images/my-spinner.gif" /> // custom
+📦 Example Usage
+
+<SkeletonClientWrapper
+  type="Image"
+  size={80}
+  circle
+  placeholder
+  loadertime={3000}
+/>
+
+<SkeletonClientWrapper
+  type="Paragraph"
+  rows={4}
+  widths={['80%', '90%', '100%', '70%']}
+  placeholder
+  spacing="1rem"
+/>
